@@ -2,31 +2,71 @@ function addMessage(text, sender) {
   const chatBox = document.getElementById("chatBox");
   const msg = document.createElement("div");
   msg.className = `message ${sender}`;
-  msg.textContent = text;
+  msg.innerHTML = text.replace(/\n/g, "<br>");
   chatBox.appendChild(msg);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
+function normalizeText(text) {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\w\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function scoreMatch(userText, keywords) {
+  let score = 0;
+  for (const keyword of keywords) {
+    const normalizedKeyword = normalizeText(keyword);
+    if (userText.includes(normalizedKeyword)) {
+      score += normalizedKeyword.split(" ").length > 1 ? 3 : 1;
+    }
+  }
+  return score;
+}
+
+function findBestAnswer(input) {
+  const normalizedInput = normalizeText(input);
+  let bestItem = null;
+  let bestScore = 0;
+
+  for (const item of knowledgeBase) {
+    const currentScore = scoreMatch(normalizedInput, item.keywords);
+    if (currentScore > bestScore) {
+      bestScore = currentScore;
+      bestItem = item;
+    }
+  }
+
+  if (!bestItem || bestScore === 0) {
+    return null;
+  }
+
+  return bestItem;
+}
+
 function getBotReply(input) {
-  const text = input.toLowerCase();
+  const result = findBestAnswer(input);
 
-  if (text.includes("vacaciones")) {
-    return "Debes solicitar las vacaciones en la herramienta interna correspondiente. Si tu empresa usa Factorial, revisa la sección de ausencias. Si tienes una excepción, contacta con RRHH.";
-  }
-  if (text.includes("permiso") || text.includes("mudanza")) {
-    return "Los permisos dependen de la política interna y del caso concreto. Revisa la política de permisos o consulta con RRHH si tu situación no es estándar.";
-  }
-  if (text.includes("nómina") || text.includes("nomina")) {
-    return "La nómina suele estar disponible en el portal del empleado o en la plataforma de RRHH. Si no la encuentras, contacta con RRHH.";
-  }
-  if (text.includes("beneficios")) {
-    return "Los beneficios disponibles dependen de la política interna. Consulta el documento de beneficios o escríbenos para revisarlo contigo.";
-  }
-  if (text.includes("onboarding")) {
-    return "En onboarding normalmente debes revisar documentación, accesos y primeros pasos con tu manager. Si te falta algo, contacta con RRHH.";
+  if (result) {
+    return `
+      <strong>${result.topic.charAt(0).toUpperCase() + result.topic.slice(1)}</strong><br><br>
+      ${result.answer}<br><br>
+      <em>Fuente: ${result.source}</em>
+    `;
   }
 
-  return "No tengo una respuesta cerrada para eso todavía. Contacta con RRHH si necesitas revisión humana.";
+  return `
+    <strong>No tengo una respuesta cerrada para eso</strong><br><br>
+    No he encontrado una coincidencia clara en la normativa cargada.<br><br>
+    Puedes escribir a:
+    <br>• rrhh@selectra.com para dudas generales
+    <br>• gestiones.corporativo@selectra.com para ausencias o permisos dudosos
+    <br>• nominas@selectra.com para temas de nómina
+  `;
 }
 
 function sendMessage() {
@@ -36,7 +76,7 @@ function sendMessage() {
 
   addMessage(value, "user");
   const reply = getBotReply(value);
-  setTimeout(() => addMessage(reply, "bot"), 300);
+  setTimeout(() => addMessage(reply, "bot"), 250);
   input.value = "";
 }
 
@@ -44,3 +84,14 @@ function askPreset(question) {
   document.getElementById("userInput").value = question;
   sendMessage();
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const userInput = document.getElementById("userInput");
+  if (userInput) {
+    userInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    });
+  }
+});
