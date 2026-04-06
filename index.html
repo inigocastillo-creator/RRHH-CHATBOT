@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asistente RRHH</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Asistente RRHH</h1>
+    <p class="subtitle">
+      Consulta dudas sobre vacaciones, permisos, nómina, beneficios y onboarding.
+    </p>
+
+    <div class="quick-buttons">
+      <button onclick="askPreset('¿Cómo pido vacaciones?')">Vacaciones</button>
+      <button onclick="askPreset('¿Qué permisos existen?')">Permisos</button>
+      <button onclick="askPreset('¿Dónde veo mi nómina?')">Nómina</button>
+      <button onclick="askPreset('¿Qué beneficios tengo?')">Beneficios</button>
+      <button onclick="askPreset('¿Qué hago en mi onboarding?')">Onboarding</button>
+    </div>
+
+    <div class="chat-box" id="chatBox">
+      <div class="message bot">
+        Hola. Soy tu asistente de RRHH. Hazme una pregunta.
+      </div>
+    </div>
+
+    <div class="input-row">
+      <input id="userInput" type="text" placeholder="Escribe tu duda aquí... Ejemplo: ¿Cómo pido vacaciones?" />
+      <button onclick="sendMessage()">Enviar</button>
+    </div>
+
+    <div class="note">
+      Este asistente responde con información orientativa. Si tu caso requiere revisión, contacta con RRHH.
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
