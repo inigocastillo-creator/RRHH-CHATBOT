@@ -10,33 +10,43 @@
   <div class="container">
     <h1>Asistente RRHH</h1>
     <p class="subtitle">
-      Consulta dudas sobre vacaciones, permisos, nómina, beneficios y onboarding.
+      Consulta dudas sobre vacaciones, teletrabajo, permisos, nóminas, horario y trámites de RRHH.
     </p>
 
     <div class="quick-buttons">
-      <button onclick="askPreset('¿Cómo pido vacaciones?')">Vacaciones</button>
-      <button onclick="askPreset('¿Qué permisos existen?')">Permisos</button>
+      <button onclick="askPreset('¿Cuántos días de vacaciones tengo?')">Vacaciones</button>
+      <button onclick="askPreset('¿Cómo pido teletrabajo?')">Teletrabajo</button>
+      <button onclick="askPreset('¿Qué permisos retribuidos hay?')">Permisos</button>
       <button onclick="askPreset('¿Dónde veo mi nómina?')">Nómina</button>
-      <button onclick="askPreset('¿Qué beneficios tengo?')">Beneficios</button>
-      <button onclick="askPreset('¿Qué hago en mi onboarding?')">Onboarding</button>
+      <button onclick="askPreset('¿Cómo cambio mi cuenta bancaria?')">Cuenta bancaria</button>
+      <button onclick="askPreset('¿Qué hago si tengo un accidente laboral?')">Accidente laboral</button>
+      <button onclick="askPreset('¿Cuál es el horario general?')">Horario</button>
+      <button onclick="askPreset('¿Cómo contacto con RRHH?')">Contacto RRHH</button>
     </div>
 
     <div class="chat-box" id="chatBox">
       <div class="message bot">
-        Hola. Soy tu asistente de RRHH. Hazme una pregunta.
+        <strong>Hola.</strong><br><br>
+        Soy tu asistente de RRHH.<br>
+        Puedes preguntarme por vacaciones, teletrabajo, permisos, nóminas, horario, fichaje o trámites internos.
       </div>
     </div>
 
     <div class="input-row">
-      <input id="userInput" type="text" placeholder="Escribe tu duda aquí... Ejemplo: ¿Cómo pido vacaciones?" />
+      <input
+        id="userInput"
+        type="text"
+        placeholder="Escribe tu duda aquí... Ejemplo: ¿Cuántos días de vacaciones tengo?"
+      />
       <button onclick="sendMessage()">Enviar</button>
     </div>
 
     <div class="note">
-      Este asistente responde con información orientativa. Si tu caso requiere revisión, contacta con RRHH.
+      Este asistente responde con base en la normativa interna cargada. Si no encuentra una respuesta clara o tu caso requiere revisión, te indicará el contacto adecuado de RRHH.
     </div>
   </div>
 
+  <script src="knowledge.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
